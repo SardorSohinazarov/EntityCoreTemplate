@@ -12,10 +12,9 @@ namespace EntityCoreTemplate.Infrastructure
         public EntityCoreTemplateDbContext(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
-            Database.Migrate();
         }
 
-        public DbSet<Book> Users { get; set; }
+        public DbSet<Book> Books { get; set; }
 
         public async Task<int> SaveChangesAsync()
         {
@@ -58,7 +57,7 @@ namespace EntityCoreTemplate.Infrastructure
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("Data Source=EntityCoreTemplate.db");
+            optionsBuilder.UseSqlite("Data Source=EntityCoreTemplate");
         }
     }
 }
