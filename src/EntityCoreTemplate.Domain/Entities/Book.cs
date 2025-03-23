@@ -1,8 +1,9 @@
-﻿namespace EntityCoreTemplate.Domain.Entities
+﻿using EntityCoreTemplate.Domain.Common;
+
+namespace EntityCoreTemplate.Domain.Entities
 {
-    public class Book
+    public class Book : Auditable
     {
-        public long Id { get; set; }
         public string Name { get; set; }
         public string Author { get; set; }
     }
