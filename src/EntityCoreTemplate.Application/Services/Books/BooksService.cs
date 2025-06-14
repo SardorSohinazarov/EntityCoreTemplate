@@ -13,12 +13,12 @@ namespace Services.Books
     [ScopedService]
     public class BooksService : IBooksService
     {
-        private readonly EntityCoreTemplateDbContext _entityCoreTemplateDbContext;
+        private readonly EntityCoreTemplateDb _entityCoreTemplateDb;
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContext;
-        public BooksService(EntityCoreTemplateDbContext entityCoreTemplateDbContext, IMapper mapper, IHttpContextAccessor httpContext)
+        public BooksService(EntityCoreTemplateDb entityCoreTemplateDb, IMapper mapper, IHttpContextAccessor httpContext)
         {
-            _entityCoreTemplateDbContext = entityCoreTemplateDbContext;
+            _entityCoreTemplateDb = entityCoreTemplateDb;
             _mapper = mapper;
             _httpContext = httpContext;
         }
@@ -26,27 +26,27 @@ namespace Services.Books
         public async Task<BookViewModel> AddAsync(BookCreationDto bookCreationDto)
         {
             var entity = _mapper.Map<Book>(bookCreationDto);
-            var entry = await _entityCoreTemplateDbContext.Set<Book>().AddAsync(entity);
-            await _entityCoreTemplateDbContext.SaveChangesAsync();
+            var entry = await _entityCoreTemplateDb.Set<Book>().AddAsync(entity);
+            await _entityCoreTemplateDb.SaveChangesAsync();
             return _mapper.Map<BookViewModel>(entry.Entity);
         }
 
         public async Task<List<BookViewModel>> GetAllAsync()
         {
-            var entities = await _entityCoreTemplateDbContext.Set<Book>().ToListAsync();
+            var entities = await _entityCoreTemplateDb.Set<Book>().ToListAsync();
             return _mapper.Map<List<BookViewModel>>(entities);
         }
 
         public async Task<List<BookViewModel>> FilterAsync(PaginationOptions filter)
         {
             var httpContext = _httpContext.HttpContext;
-            var entities = await _entityCoreTemplateDbContext.Set<Book>().ApplyPagination(filter, httpContext).ToListAsync();
+            var entities = await _entityCoreTemplateDb.Set<Book>().ApplyPagination(filter, httpContext).ToListAsync();
             return _mapper.Map<List<BookViewModel>>(entities);
         }
 
         public async Task<BookViewModel> GetByIdAsync(long id)
         {
-            var entity = await _entityCoreTemplateDbContext.Set<Book>().FirstOrDefaultAsync(x => x.Id == id);
+            var entity = await _entityCoreTemplateDb.Set<Book>().FirstOrDefaultAsync(x => x.Id == id);
             if (entity == null)
                 throw new InvalidOperationException($"Book with Id {id} not found.");
             return _mapper.Map<BookViewModel>(entity);
@@ -54,22 +54,22 @@ namespace Services.Books
 
         public async Task<BookViewModel> UpdateAsync(long id, BookModificationDto bookModificationDto)
         {
-            var entity = await _entityCoreTemplateDbContext.Set<Book>().FirstOrDefaultAsync(x => x.Id == id);
+            var entity = await _entityCoreTemplateDb.Set<Book>().FirstOrDefaultAsync(x => x.Id == id);
             if (entity == null)
                 throw new InvalidOperationException($"Book with {id} not found.");
             _mapper.Map(bookModificationDto, entity);
-            var entry = _entityCoreTemplateDbContext.Set<Book>().Update(entity);
-            await _entityCoreTemplateDbContext.SaveChangesAsync();
+            var entry = _entityCoreTemplateDb.Set<Book>().Update(entity);
+            await _entityCoreTemplateDb.SaveChangesAsync();
             return _mapper.Map<BookViewModel>(entry.Entity);
         }
 
         public async Task<BookViewModel> DeleteAsync(long id)
         {
-            var entity = await _entityCoreTemplateDbContext.Set<Book>().FirstOrDefaultAsync(x => x.Id == id);
+            var entity = await _entityCoreTemplateDb.Set<Book>().FirstOrDefaultAsync(x => x.Id == id);
             if (entity == null)
                 throw new InvalidOperationException($"Book with {id} not found.");
-            var entry = _entityCoreTemplateDbContext.Set<Book>().Remove(entity);
-            await _entityCoreTemplateDbContext.SaveChangesAsync();
+            var entry = _entityCoreTemplateDb.Set<Book>().Remove(entity);
+            await _entityCoreTemplateDb.SaveChangesAsync();
             return _mapper.Map<BookViewModel>(entry.Entity);
         }
     }

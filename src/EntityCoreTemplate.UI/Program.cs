@@ -1,10 +1,16 @@
 using EntityCoreTemplate.UI.Components;
+using EntityCoreTemplate.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddDinamicMenu();
+builder.Services.AddApplication();
 
 var app = builder.Build();
 
