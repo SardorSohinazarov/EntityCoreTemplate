@@ -6,10 +6,10 @@ using System.Security.Claims;
 
 namespace EntityCoreTemplate.Infrastructure
 {
-    public class EntityCoreTemplateDbContext : DbContext
+    public class EntityCoreTemplateDb : DbContext
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public EntityCoreTemplateDbContext(IHttpContextAccessor httpContextAccessor)
+        public EntityCoreTemplateDb(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
         }
@@ -57,7 +57,7 @@ namespace EntityCoreTemplate.Infrastructure
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("Data Source=EntityCoreTemplate");
+            optionsBuilder.UseSqlite($"Data Source=EntityCoreTemplateDb");
         }
     }
 }

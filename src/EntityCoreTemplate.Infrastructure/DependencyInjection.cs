@@ -6,7 +6,7 @@ namespace EntityCoreTemplate.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
-            services.AddDbContext<EntityCoreTemplateDbContext>();
+            services.AddDbContext<EntityCoreTemplateDb>();
 
             return services;
         }
