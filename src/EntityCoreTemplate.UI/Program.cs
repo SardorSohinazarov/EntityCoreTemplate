@@ -1,5 +1,6 @@
 using EntityCoreTemplate.UI.Components;
 using EntityCoreTemplate.Application;
+using EntityCoreTemplate.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,7 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddDinamicMenu();
 builder.Services.AddApplication();
+builder.Services.AddInfrastructure();
 
 var app = builder.Build();
 
