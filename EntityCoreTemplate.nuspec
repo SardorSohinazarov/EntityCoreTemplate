@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>EntityCoreTemplate</id>
+    <version>1.0.0</version>
+    <authors>Sardor Sohinazarov</authors>
+    <owners>Sardor Sohinazarov</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>ASP.NET Core Clean Architecture template</description>
+    <tags>dotnet-new template clean-architecture entity core</tags>
+    <packageTypes>
+      <packageType name="Template" />
+    </packageTypes>
+  </metadata>
+</package>
