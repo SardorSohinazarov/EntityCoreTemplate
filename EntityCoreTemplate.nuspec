@@ -12,4 +12,10 @@
       <packageType name="Template" />
     </packageTypes>
   </metadata>
+
+  <files>
+    <file src="src\**\*" target="content\src" />
+    <file src=".template.config\**\*" target="content\.template.config" />
+  </files>
+
 </package>
