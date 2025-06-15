@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EntityCoreTemplate.Infrastructure.Migrations
 {
     [DbContext(typeof(EntityCoreTemplateDb))]
-    [Migration("20250614084657_Init")]
+    [Migration("20250615151652_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -37,18 +37,16 @@ namespace EntityCoreTemplate.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime?>("Created")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("LastModifiedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
