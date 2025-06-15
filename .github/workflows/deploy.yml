@@ -22,5 +22,12 @@ jobs:
         echo "=== nupkg filelari ==="
         dir ./nupkg
 
-    - name: Push to NuGet
-      run: nuget push ./nupkg/*.nupkg -Source https://api.nuget.org/v3/index.json -ApiKey ${{ secrets.NUGET_API_KEY }}
+    - name: Push NuGet package
+      shell: powershell
+      run: |
+        $nupkg = Get-ChildItem -Path "./nupkg" -Filter "*.nupkg" | Select-Object -First 1
+        if ($nupkg) {
+            & $env:NUGET push $nupkg.FullName -Source https://api.nuget.org/v3/index.json -ApiKey ${{ secrets.NUGET_API_KEY }}
+        } else {
+            Write-Error "nupkg fayli topilmadi"
+        }
