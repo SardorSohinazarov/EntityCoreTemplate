@@ -1,0 +1,23 @@
+name: Publish .NET Template (via .nuspec) to NuGet
+
+on:
+  push:
+    branches:
+      - prod
+
+jobs:
+  publish:
+    runs-on: windows-latest # windows kerak, chunki `nuget.exe` ishlatiladi
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Install NuGet CLI
+      uses: nuget/setup-nuget@v1
+
+    - name: Pack template with nuget
+      run: nuget pack EntityCoreTemplate.nuspec -OutputDirectory ./nupkg
+
+    - name: Push to NuGet
+      run: nuget push ./nupkg/*.nupkg -Source https://api.nuget.org/v3/index.json -ApiKey ${{ secrets.NUGET_API_KEY }}
