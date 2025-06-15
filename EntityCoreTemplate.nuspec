@@ -5,9 +5,11 @@
     <version>1.0.1</version>
     <authors>Sardor Sohinazarov</authors>
     <owners>Sardor Sohinazarov</owners>
+    <projectUrl>https://YOUR_GITHUB_REPO_OR_PROJECT_URL_HERE</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>ASP.NET Core Clean Architecture template</description>
-    <tags>dotnet-new template clean-architecture entity core</tags>
+    <!-- Consider adding a license element if you have a specific license, e.g., <license type="MIT">LICENSE.txt</license> and include LICENSE.txt in your files -->
+    <description>An ASP.NET Core Clean Architecture solution template that includes a Web API, Blazor Server UI, Entity Framework Core, and follows best practices for domain-driven design.</description>
+    <tags>dotnet-new template clean-architecture entitycore aspnetcore webapi blazor efcore</tags>
     <packageTypes>
       <packageType name="Template" />
     </packageTypes>

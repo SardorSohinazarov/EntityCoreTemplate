@@ -65,12 +65,5 @@ namespace EntityCoreTemplate.Infrastructure
             return userId ?? "System";
 
         }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            // Sqliteda file va birnechta startup projectlar bo'lgani uchun maqul topmadim
-            //optionsBuilder.UseSqlite($"Data Source=EntityCoreTemplateDb");
-            optionsBuilder.UseSqlServer(connectionString: "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=EntityCoreTemplateDb;");
-        }
     }
 }
