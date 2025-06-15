@@ -28,11 +28,11 @@ namespace Controllers
             return Result<List<Book>>.Success(await _booksService.GetAllAsync());
         }
 
-        //[HttpPost("filter")]
-        //public async Task<Result<List<Book>>> FilterAsync(PaginationOptions filter)
-        //{
-        //    return Result<List<Book>>.Success(await _booksService.FilterAsync(filter));
-        //}
+        [HttpPost("filter")]
+        public async Task<Result<ListResult<Book>>> FilterAsync(PaginationOptions filter)
+        {
+            return Result<ListResult<Book>>.Success(await _booksService.FilterAsync(filter));
+        }
 
         [HttpGet("{id}")]
         public async Task<Result<Book>> GetByIdAsync(long id)

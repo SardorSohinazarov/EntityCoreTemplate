@@ -8,11 +8,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-builder.Services.AddHttpContextAccessor();
-
 builder.Services.AddDinamicMenu();
+
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure();
+
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
