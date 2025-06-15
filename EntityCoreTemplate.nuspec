@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>EntityCoreTemplate</id>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <authors>Sardor Sohinazarov</authors>
     <owners>Sardor Sohinazarov</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -15,6 +15,7 @@
 
   <files>
     <file src="src\**\*" target="content\src" />
+    <file src="EntityCoreTemplate.sln" target="content\EntityCoreTemplate.sln" />
     <file src=".template.config\**\*" target="content\.template.config" />
   </files>
 
