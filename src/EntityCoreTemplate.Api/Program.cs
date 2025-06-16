@@ -1,3 +1,4 @@
+using EntityCoreTemplate.Api.Extensions;
 using EntityCoreTemplate.Application;
 using EntityCoreTemplate.Infrastructure;
 using Middlewares;
