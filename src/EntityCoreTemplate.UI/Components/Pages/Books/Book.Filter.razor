@@ -8,7 +8,7 @@
 @inject NavigationManager NavigationManager
 @using Microsoft.AspNetCore.WebUtilities
 @using Common.Paginations.Models
-@using EntityCoreTemplate.Domain.Entities
+@using DataTransferObjects.Books
 @using Services.Books
 @inject IBooksService BookService
 
@@ -106,7 +106,7 @@ else
 }
 
 @code {
-    private List<Book> Books { get; set; }
+    private List<BookViewModel> Books { get; set; }
     private PaginationOptions PaginationOptions { get; set; }
     private PaginationMetadata PaginationMetadata { get; set; }
 

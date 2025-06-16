@@ -5,7 +5,7 @@
 
 @page "/books/{id:long}"
 @rendermode InteractiveServer
-@using EntityCoreTemplate.Domain.Entities
+@using DataTransferObjects.Books
 @using Services.Books
 @inject IBooksService BookService
 @inject NavigationManager NavigationManager
@@ -90,7 +90,7 @@ else
     [Parameter]
     public long Id { get; set; }
 
-    private Book? book;
+    private BookViewModel? book;
 
     protected override async Task OnParametersSetAsync()
     {

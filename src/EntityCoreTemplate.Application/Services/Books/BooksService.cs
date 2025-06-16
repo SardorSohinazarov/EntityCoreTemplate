@@ -10,6 +10,7 @@ using Common.Paginations.Models;
 using Common.Paginations.Extensions;
 using Common.ServiceAttribute;
 using Common;
+using DataTransferObjects.Books;
 using EntityCoreTemplate.Infrastructure;
 using EntityCoreTemplate.Domain.Entities;
 
@@ -26,54 +27,67 @@ namespace Services.Books
             _mapper = mapper;
         }
 
-        public async Task<Book> AddAsync(Book book)
+        public async Task<BookViewModel> AddAsync(BookCreationDto bookCreationDto)
         {
-            var entity = _mapper.Map<Book>(book);
+            var entity = _mapper.Map<Book>(bookCreationDto);
             var entry = await _entityCoreTemplateDb.Set<Book>().AddAsync(entity);
             await _entityCoreTemplateDb.SaveChangesAsync();
-            return entry.Entity;
+            return _mapper.Map<BookViewModel>(entry.Entity);
         }
 
-        public async Task<List<Book>> GetAllAsync()
+        public async Task<List<BookViewModel>> GetAllAsync()
         {
             var entities = await _entityCoreTemplateDb.Set<Book>().ToListAsync();
-            return entities;
+            return _mapper.Map<List<BookViewModel>>(entities);
         }
 
-        public async Task<ListResult<Book>> FilterAsync(PaginationOptions filter)
+        public async Task<ListResult<BookViewModel>> FilterAsync(PaginationOptions filter)
         {
             var paginatedResult = await _entityCoreTemplateDb.Set<Book>().ApplyPaginationAsync(filter);
-            var Books = _mapper.Map<List<Book>>(paginatedResult.paginatedList);
-            return new ListResult<Book>(paginatedResult.paginationMetadata, Books);
+            var Books = _mapper.Map<List<BookViewModel>>(paginatedResult.paginatedList);
+            return new ListResult<BookViewModel>(paginatedResult.paginationMetadata, Books);
         }
 
-        public async Task<Book> GetByIdAsync(long id)
+        public async Task<BookViewModel> GetByIdAsync(long id)
         {
             var entity = await _entityCoreTemplateDb.Set<Book>().FirstOrDefaultAsync(x => x.Id == id);
             if (entity == null)
                 throw new InvalidOperationException($"Book with Id {id} not found.");
-            return entity;
+            return _mapper.Map<BookViewModel>(entity);
         }
 
-        public async Task<Book> UpdateAsync(long id, Book book)
+        public async Task<BookViewModel> UpdateAsync(long id, BookModificationDto bookModificationDto)
         {
             var entity = await _entityCoreTemplateDb.Set<Book>().FirstOrDefaultAsync(x => x.Id == id);
             if (entity == null)
                 throw new InvalidOperationException($"Book with {id} not found.");
-            _mapper.Map(book, entity);
+            _mapper.Map(bookModificationDto, entity);
             var entry = _entityCoreTemplateDb.Set<Book>().Update(entity);
             await _entityCoreTemplateDb.SaveChangesAsync();
-            return entry.Entity;
+            return _mapper.Map<BookViewModel>(entry.Entity);
         }
 
-        public async Task<Book> DeleteAsync(long id)
+        public async Task<BookViewModel> DeleteAsync(long id)
         {
             var entity = await _entityCoreTemplateDb.Set<Book>().FirstOrDefaultAsync(x => x.Id == id);
             if (entity == null)
                 throw new InvalidOperationException($"Book with {id} not found.");
             var entry = _entityCoreTemplateDb.Set<Book>().Remove(entity);
             await _entityCoreTemplateDb.SaveChangesAsync();
-            return entry.Entity;
+            return _mapper.Map<BookViewModel>(entry.Entity);
+        }
+    }
+
+    /// <summary>
+    /// AutoMapper mapping profile for Book entity.
+    /// </summary>
+    public class BookMappingProfile : Profile
+    {
+        public BookMappingProfile()
+        {
+            CreateMap<Book, BookViewModel>();
+            CreateMap<BookCreationDto, Book>();
+            CreateMap<BookModificationDto, Book>();
         }
     }
 }
