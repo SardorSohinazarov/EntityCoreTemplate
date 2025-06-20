@@ -6,5 +6,13 @@ namespace EntityCoreTemplate.Domain.Entities
     {
         public string Name { get; set; }
         public string Author { get; set; }
+        public BookType Type { get; set; }
+    }
+
+    public enum BookType
+    {
+        Paperback,
+        Ebook,
+        Audiobook
     }
 }

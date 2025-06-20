@@ -5,17 +5,18 @@
 
 using Common.Paginations.Models;
 using Common;
+using DataTransferObjects.Books;
 using EntityCoreTemplate.Domain.Entities;
 
 namespace Services.Books
 {
     public interface IBooksService
     {
-        Task<Book> AddAsync(Book book);
-        Task<List<Book>> GetAllAsync();
-        Task<ListResult<Book>> FilterAsync(PaginationOptions filter);
-        Task<Book> GetByIdAsync(long id);
-        Task<Book> UpdateAsync(long id, Book book);
-        Task<Book> DeleteAsync(long id);
+        Task<BookViewModel> AddAsync(BookCreationDto bookCreationDto);
+        Task<List<BookViewModel>> GetAllAsync();
+        Task<ListResult<BookViewModel>> FilterAsync(PaginationOptions filter);
+        Task<BookViewModel> GetByIdAsync(long id);
+        Task<BookViewModel> UpdateAsync(long id, BookModificationDto bookModificationDto);
+        Task<BookViewModel> DeleteAsync(long id);
     }
 }

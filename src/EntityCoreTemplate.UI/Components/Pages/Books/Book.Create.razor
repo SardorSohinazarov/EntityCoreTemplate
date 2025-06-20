@@ -5,14 +5,16 @@
 
 @page "/books/create"
 @rendermode InteractiveServer
+@using System
 @using EntityCoreTemplate.Domain.Entities
+@using DataTransferObjects.Books
 @using Services.Books
 @inject IBooksService BookService
 @inject NavigationManager NavigationManager
 
 <h3>Create New Book</h3>
 
-<EditForm FormName="Book" Model="@book" OnValidSubmit="() => HandleValidSubmit()">
+<EditForm FormName="BookCreationDto" Model="@book" OnValidSubmit="() => HandleValidSubmit()">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
@@ -25,6 +27,16 @@
         <label for="author">Author:</label>
         <InputText id="author" class="form-control" @bind-Value="book.Author" />
         <ValidationMessage For="@(() => book.Author)" />
+    </div>
+    <div class="form-group mb-3">
+        <label for="type">Type:</label>
+        <InputSelect id="type" class="form-control" @bind-Value="book.Type">
+            @foreach (var value in Enum.GetValues(typeof(BookType)))
+            {
+                <option value="@value">@value</option>
+            }
+        </InputSelect>
+        <ValidationMessage For="@(() => book.Type)" />
     </div>
     <div class="form-group mb-3">
         <label for="createdby">CreatedBy:</label>
@@ -46,11 +58,6 @@
         <InputDate id="lastmodified" class="form-control" @bind-Value="book.LastModified" />
         <ValidationMessage For="@(() => book.LastModified)" />
     </div>
-    <div class="form-group mb-3">
-        <label for="id">Id:</label>
-        <InputNumber id="id" class="form-control" @bind-Value="book.Id" />
-        <ValidationMessage For="@(() => book.Id)" />
-    </div>
 
     <button type="submit" class="btn btn-primary">Save</button>
     <button type="button" class="btn btn-secondary" @onclick="Cancel">Cancel</button>
@@ -58,7 +65,7 @@
 
 @code {
     [SupplyParameterFromForm]
-    public Book book { get; set; } = new Book();
+    public BookCreationDto book { get; set; } = new BookCreationDto();
 
     private async Task HandleValidSubmit()
     {

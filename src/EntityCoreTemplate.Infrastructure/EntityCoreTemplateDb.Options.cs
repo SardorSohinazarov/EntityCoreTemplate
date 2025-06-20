@@ -8,11 +8,8 @@ namespace EntityCoreTemplate.Infrastructure
     public partial class EntityCoreTemplateDb
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public EntityCoreTemplateDb(IHttpContextAccessor httpContextAccessor)
-        {
-            _httpContextAccessor = httpContextAccessor;
-            Database.Migrate();
-        }
+        public EntityCoreTemplateDb(IHttpContextAccessor httpContextAccessor) 
+            => _httpContextAccessor = httpContextAccessor;
 
         /// <summary>
         /// Save all changes with auditable information.
@@ -74,11 +71,8 @@ namespace EntityCoreTemplate.Infrastructure
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            // Default database Sql Server
+            // Default database Sql Server, you can change it to your preferred database provider.
             optionsBuilder.UseSqlServer(connectionString: "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=EntityCoreTemplateDb;");
-            
-            // Sqliteda filelarda saqlangani uchun va birnechta startup projectlar(EntityCoreTemplate.Api va EntityCoreTemplate.UI) bo'lgani uchun maqul topmadim.
-            //optionsBuilder.UseSqlite($"Data Source=EntityCoreTemplateDb");
         }
     }
 }

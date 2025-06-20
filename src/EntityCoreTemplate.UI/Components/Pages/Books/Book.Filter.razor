@@ -8,7 +8,9 @@
 @inject NavigationManager NavigationManager
 @using Microsoft.AspNetCore.WebUtilities
 @using Common.Paginations.Models
+@using System
 @using EntityCoreTemplate.Domain.Entities
+@using DataTransferObjects.Books
 @using Services.Books
 @inject IBooksService BookService
 
@@ -28,6 +30,7 @@ else
                 <th>#</th>
                 <th>Name</th>
                 <th>Author</th>
+                <th>Type</th>
                 <th>CreatedBy</th>
                 <th>Created</th>
                 <th>LastModifiedBy</th>
@@ -52,6 +55,15 @@ else
                     @if(@item.Author != default)
                     {
                         <td>@item.Author</td>
+                    }
+                    else
+                    {
+                        <td>None</td>
+                    }
+
+                    @if(@item.Type != default)
+                    {
+                        <td>@item.Type</td>
                     }
                     else
                     {
@@ -106,7 +118,7 @@ else
 }
 
 @code {
-    private List<Book> Books { get; set; }
+    private List<BookViewModel> Books { get; set; }
     private PaginationOptions PaginationOptions { get; set; }
     private PaginationMetadata PaginationMetadata { get; set; }
 
