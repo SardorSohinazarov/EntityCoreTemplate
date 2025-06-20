@@ -5,6 +5,8 @@
 
 @page "/books/create"
 @rendermode InteractiveServer
+@using System
+@using EntityCoreTemplate.Domain.Entities
 @using DataTransferObjects.Books
 @using Services.Books
 @inject IBooksService BookService
@@ -25,6 +27,16 @@
         <label for="author">Author:</label>
         <InputText id="author" class="form-control" @bind-Value="book.Author" />
         <ValidationMessage For="@(() => book.Author)" />
+    </div>
+    <div class="form-group mb-3">
+        <label for="type">Type:</label>
+        <InputSelect id="type" class="form-control" @bind-Value="book.Type">
+            @foreach (var value in Enum.GetValues(typeof(BookType)))
+            {
+                <option value="@value">@value</option>
+            }
+        </InputSelect>
+        <ValidationMessage For="@(() => book.Type)" />
     </div>
     <div class="form-group mb-3">
         <label for="createdby">CreatedBy:</label>

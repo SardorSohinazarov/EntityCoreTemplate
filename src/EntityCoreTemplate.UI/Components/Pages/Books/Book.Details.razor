@@ -5,6 +5,8 @@
 
 @page "/books/{id:long}"
 @rendermode InteractiveServer
+@using System
+@using EntityCoreTemplate.Domain.Entities
 @using DataTransferObjects.Books
 @using Services.Books
 @inject IBooksService BookService
@@ -33,6 +35,16 @@ else
         @if(@book.Author != default)
         {
             <dd class="col-sm-9">@book.Author</dd>
+        }
+        else
+        {
+            <dd class="col-sm-9">None</dd>
+        }
+
+        <dt class="col-sm-3">Type</dt>
+        @if(@book.Type != default)
+        {
+            <dd class="col-sm-9">@book.Type</dd>
         }
         else
         {
