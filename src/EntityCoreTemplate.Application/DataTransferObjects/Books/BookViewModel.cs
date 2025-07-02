@@ -10,6 +10,7 @@ namespace DataTransferObjects.Books;
 
 public class BookViewModel
 {
+    public long Id { get; set; }
     public string Name { get; set; }
     public string Author { get; set; }
     public BookType Type { get; set; }
@@ -17,5 +18,4 @@ public class BookViewModel
     public DateTime? Created { get; set; }
     public string LastModifiedBy { get; set; }
     public DateTime? LastModified { get; set; }
-    public long Id { get; set; }
 }

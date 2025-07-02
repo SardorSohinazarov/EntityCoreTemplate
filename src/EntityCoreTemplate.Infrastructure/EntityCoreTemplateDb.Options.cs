@@ -1,6 +1,8 @@
 ﻿using EntityCoreTemplate.Domain.Common;
+using EntityCoreTemplate.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 using System.Security.Claims;
 
 namespace EntityCoreTemplate.Infrastructure
@@ -8,7 +10,8 @@ namespace EntityCoreTemplate.Infrastructure
     public partial class EntityCoreTemplateDb
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public EntityCoreTemplateDb(IHttpContextAccessor httpContextAccessor) 
+        public EntityCoreTemplateDb(IHttpContextAccessor httpContextAccessor, DbContextOptions<EntityCoreTemplateDb> options)
+            : base(options)
             => _httpContextAccessor = httpContextAccessor;
 
         /// <summary>
@@ -17,40 +20,40 @@ namespace EntityCoreTemplate.Infrastructure
         /// <returns></returns>
         public async Task<int> SaveChangesAsync()
         {
-            try
+            var deletedEntries = ChangeTracker
+                .Entries<ISoftDeletable>()
+                .Where(e => e.State == EntityState.Deleted);
+
+            foreach (var entry in deletedEntries)
             {
-                var entries = ChangeTracker
-                    .Entries()
-                    .Where(e =>
-                        e.State == EntityState.Added || e.State == EntityState.Modified)
-                    .Where(e =>
-                        e.Entity is Auditable ||
-                        (e.Entity.GetType().IsGenericType &&
-                         e.Entity.GetType().GetGenericTypeDefinition() == typeof(Auditable<>)));
+                entry.Entity.IsDeleted = true;
+                entry.State = EntityState.Modified;
+            }
 
-                foreach (var entry in entries)
+            var entries = ChangeTracker
+                .Entries()
+                .Where(e =>
+                    e.State == EntityState.Added || e.State == EntityState.Modified)
+                .Where(e => e.Entity.GetType().IsSubclassOfRawGeneric(typeof(Auditable<>)));
+
+            foreach (var entry in entries)
+            {
+                dynamic auditableEntity = entry.Entity;
+
+                if (entry.State == EntityState.Added)
                 {
-                    dynamic auditableEntity = entry.Entity;
-
-                    if (entry.State == EntityState.Added)
-                    {
-                        auditableEntity.Created = DateTime.UtcNow;
-                        auditableEntity.CreatedBy = GetUserId();
-                    }
-
-                    if (entry.State == EntityState.Modified)
-                    {
-                        auditableEntity.LastModified = DateTime.UtcNow;
-                        auditableEntity.LastModifiedBy = GetUserId();
-                    }
+                    auditableEntity.Created = DateTime.UtcNow;
+                    auditableEntity.CreatedBy = GetUserId();
                 }
 
-                return await base.SaveChangesAsync();
+                if (entry.State == EntityState.Modified)
+                {
+                    auditableEntity.LastModified = DateTime.UtcNow;
+                    auditableEntity.LastModifiedBy = GetUserId();
+                }
             }
-            catch(Exception ex)
-            {
-                throw;
-            }
+
+            return await base.SaveChangesAsync();
         }
 
         /// <summary>
@@ -69,10 +72,28 @@ namespace EntityCoreTemplate.Infrastructure
 
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        /// <summary>
+        /// Configure the model for the DbContext, including query filters for soft deletable entities.
+        /// ex:(x => x.IsDeleted == false)
+        /// </summary>
+        /// <param name="modelBuilder"></param>
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Default database Sql Server, you can change it to your preferred database provider.
-            optionsBuilder.UseSqlServer(connectionString: "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=EntityCoreTemplateDb;");
+            // Apply configurations for entities
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(EntityCoreTemplateDb).Assembly);
+
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                if (typeof(ISoftDeletable).IsAssignableFrom(entityType.ClrType))
+                {
+                    var parameter = Expression.Parameter(entityType.ClrType, "e");
+                    var property = Expression.Property(parameter, nameof(ISoftDeletable.IsDeleted));
+                    var compare = Expression.Equal(property, Expression.Constant(false));
+                    var lambda = Expression.Lambda(compare, parameter);
+
+                    entityType.SetQueryFilter(lambda);
+                }
+            }
         }
     }
 }
