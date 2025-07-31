@@ -15,6 +15,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddApplication(builder.Configuration);
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddTransient<ExceptionHandlingMiddleware>();
 
 builder.Services.AddHttpContextAccessor();
 
